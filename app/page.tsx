@@ -7,6 +7,14 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { eq } from "drizzle-orm";
+
+import { db } from "@/lib/db";
+import {
+  categories,
+  subCategories,
+} from "@/app/db/schema";
+
 import SearchBox from "@/app/components/home/SearchBox";
 import CategoryGrid from "@/app/components/home/CategoryGrid";
 import NearbyBusinesses from "@/app/components/home/NearbyBusinesses";
@@ -29,52 +37,49 @@ interface Category {
 
 async function getCategories(): Promise<Category[]> {
   try {
-    let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+    const rows = await db
+      .select({
+        id: categories.id,
+        name: categories.name,
+        slug: categories.slug,
+        icon: categories.icon,
+        image: categories.image,
+        sortOrder: categories.sortOrder,
+        isActive: categories.isActive,
+      })
+      .from(categories)
+      .where(eq(categories.isActive, true))
+      .orderBy(categories.sortOrder);
 
-    // Vercel production / preview
-    if (!baseUrl && process.env.VERCEL_URL) {
-      baseUrl = `https://${process.env.VERCEL_URL}`;
+    const result: Category[] = [];
+
+    for (const category of rows) {
+      const children = await db
+        .select({
+          id: subCategories.id,
+          name: subCategories.name,
+          slug: subCategories.slug,
+          sortOrder: subCategories.sortOrder,
+        })
+        .from(subCategories)
+        .where(
+          eq(
+            subCategories.categoryId,
+            category.id
+          )
+        )
+        .orderBy(subCategories.sortOrder);
+
+      result.push({
+        ...category,
+        subCategories: children,
+      });
     }
 
-    // Local development
-    if (!baseUrl) {
-      baseUrl = "http://localhost:3000";
-    }
-
-    const response = await fetch(
-      `${baseUrl}/api/categories`,
-      {
-        cache: "no-store",
-      }
-    );
-
-    if (!response.ok) {
-      console.error(
-        "Categories API failed:",
-        response.status,
-        response.statusText
-      );
-
-      return [];
-    }
-
-    const result = await response.json();
-
-    if (!result.success) {
-      console.error(
-        "Categories API returned unsuccessful response:",
-        result
-      );
-
-      return [];
-    }
-
-    return Array.isArray(result.data)
-      ? result.data
-      : [];
+    return result;
   } catch (error) {
     console.error(
-      "Failed to load categories:",
+      "Failed to load homepage categories:",
       error
     );
 
@@ -83,8 +88,7 @@ async function getCategories(): Promise<Category[]> {
 }
 
 export default async function HomePage() {
-  const categories =
-    await getCategories();
+  const categoriesData = await getCategories();
 
   return (
     <div>
@@ -163,7 +167,7 @@ export default async function HomePage() {
         </div>
 
         <CategoryGrid
-          categories={categories}
+          categories={categoriesData}
         />
       </section>
 
