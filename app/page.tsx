@@ -29,9 +29,17 @@ interface Category {
 
 async function getCategories(): Promise<Category[]> {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_APP_URL ??
-      "http://localhost:3000";
+    let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+    // Vercel production / preview
+    if (!baseUrl && process.env.VERCEL_URL) {
+      baseUrl = `https://${process.env.VERCEL_URL}`;
+    }
+
+    // Local development
+    if (!baseUrl) {
+      baseUrl = "http://localhost:3000";
+    }
 
     const response = await fetch(
       `${baseUrl}/api/categories`,
@@ -41,15 +49,35 @@ async function getCategories(): Promise<Category[]> {
     );
 
     if (!response.ok) {
+      console.error(
+        "Categories API failed:",
+        response.status,
+        response.statusText
+      );
+
       return [];
     }
 
     const result = await response.json();
 
-    return result.success
-      ? result.data ?? []
+    if (!result.success) {
+      console.error(
+        "Categories API returned unsuccessful response:",
+        result
+      );
+
+      return [];
+    }
+
+    return Array.isArray(result.data)
+      ? result.data
       : [];
-  } catch {
+  } catch (error) {
+    console.error(
+      "Failed to load categories:",
+      error
+    );
+
     return [];
   }
 }
