@@ -122,7 +122,7 @@ export default function ContactPage() {
 
           {/* Facebook - Nexora Soft */}
           <a
-            href="https://www.facebook.com/search/pages/?q=Nexora%20Soft"
+            href="hhttps://www.facebook.com/profile.php?id=61594275501371"
             target="_blank"
             rel="noreferrer"
             className="group rounded-3xl border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
