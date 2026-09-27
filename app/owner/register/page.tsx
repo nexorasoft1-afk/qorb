@@ -89,7 +89,12 @@ function extractCategories(data: any): Category[] {
 
   return raw.map((item: any) => ({
     id: Number(item.id ?? item.categoryId ?? item.CategoryID),
-    name: String(item.name ?? item.Name ?? item.categoryName ?? ""),
+    name: String(
+      item.name ??
+        item.Name ??
+        item.categoryName ??
+        ""
+    ),
     slug: item.slug ?? item.Slug,
     subCategories:
       item.subCategories ||
@@ -105,8 +110,17 @@ function extractCities(data: any): City[] {
 
   return raw
     .map((item: any) => ({
-      id: Number(item.id ?? item.cityId ?? item.CityID),
-      name: String(item.name ?? item.Name ?? item.cityName ?? ""),
+      id: Number(
+        item.id ??
+          item.cityId ??
+          item.CityID
+      ),
+      name: String(
+        item.name ??
+          item.Name ??
+          item.cityName ??
+          ""
+      ),
       slug: item.slug ?? item.Slug,
       governorateId:
         item.governorateId ??
@@ -114,7 +128,9 @@ function extractCities(data: any): City[] {
         item.GovernorateID ??
         null,
     }))
-    .filter((item) => item.id && item.name);
+    .filter(
+      (item) => item.id && item.name
+    );
 }
 
 function extractAreas(data: any): Area[] {
@@ -122,8 +138,17 @@ function extractAreas(data: any): Area[] {
 
   return raw
     .map((item: any) => ({
-      id: Number(item.id ?? item.areaId ?? item.AreaID),
-      name: String(item.name ?? item.Name ?? item.areaName ?? ""),
+      id: Number(
+        item.id ??
+          item.areaId ??
+          item.AreaID
+      ),
+      name: String(
+        item.name ??
+          item.Name ??
+          item.areaName ??
+          ""
+      ),
       cityId:
         item.cityId ??
         item.city_id ??
@@ -135,7 +160,9 @@ function extractAreas(data: any): Area[] {
         item.CityID ??
         undefined,
     }))
-    .filter((item) => item.id && item.name);
+    .filter(
+      (item) => item.id && item.name
+    );
 }
 
 // =========================================================
@@ -155,59 +182,96 @@ export default function OwnerRegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // شاشة نجاح إرسال الطلب
+  const [submitted, setSubmitted] = useState(false);
+
   // =======================================================
   // Auth
   // =======================================================
 
-  const [user, setUser] = useState<MeResponse["user"] | null>(null);
+  const [user, setUser] =
+    useState<MeResponse["user"] | null>(null);
 
   // =======================================================
   // Lookups
   // =======================================================
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [cities, setCities] = useState<City[]>([]);
-  const [areas, setAreas] = useState<Area[]>([]);
+  const [categories, setCategories] =
+    useState<Category[]>([]);
+
+  const [cities, setCities] =
+    useState<City[]>([]);
+
+  const [areas, setAreas] =
+    useState<Area[]>([]);
 
   // =======================================================
   // Form
   // =======================================================
 
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] =
+    useState("");
 
-  const [categoryId, setCategoryId] = useState("");
-  const [subCategoryId, setSubCategoryId] = useState("");
+  const [categoryId, setCategoryId] =
+    useState("");
 
-  const [cityId, setCityId] = useState("");
-  const [areaId, setAreaId] = useState("");
+  const [subCategoryId, setSubCategoryId] =
+    useState("");
 
-  const [address, setAddress] = useState("");
+  const [cityId, setCityId] =
+    useState("");
 
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
+  const [areaId, setAreaId] =
+    useState("");
 
-  const [phone, setPhone] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
-  const [website, setWebsite] = useState("");
+  const [address, setAddress] =
+    useState("");
 
-  const [priceRange, setPriceRange] = useState("");
+  const [latitude, setLatitude] =
+    useState("");
+
+  const [longitude, setLongitude] =
+    useState("");
+
+  const [phone, setPhone] =
+    useState("");
+
+  const [whatsapp, setWhatsapp] =
+    useState("");
+
+  const [website, setWebsite] =
+    useState("");
+
+  const [priceRange, setPriceRange] =
+    useState("");
 
   // =======================================================
   // Location
   // =======================================================
 
-  const [locationLoading, setLocationLoading] = useState(false);
-  const [locationMessage, setLocationMessage] = useState("");
-  const [locationSuccess, setLocationSuccess] = useState(false);
+  const [locationLoading, setLocationLoading] =
+    useState(false);
+
+  const [locationMessage, setLocationMessage] =
+    useState("");
+
+  const [locationSuccess, setLocationSuccess] =
+    useState(false);
 
   // =======================================================
   // Area suggestion
   // =======================================================
 
-  const [showAreaSuggestion, setShowAreaSuggestion] = useState(false);
-  const [suggestedAreaName, setSuggestedAreaName] = useState("");
-  const [suggestedAreaNotes, setSuggestedAreaNotes] = useState("");
+  const [showAreaSuggestion, setShowAreaSuggestion] =
+    useState(false);
+
+  const [suggestedAreaName, setSuggestedAreaName] =
+    useState("");
+
+  const [suggestedAreaNotes, setSuggestedAreaNotes] =
+    useState("");
+
   const [areaSuggestionLoading, setAreaSuggestionLoading] =
     useState(false);
 
@@ -217,7 +281,9 @@ export default function OwnerRegisterPage() {
 
   const selectedCategory = useMemo(() => {
     return categories.find(
-      (item) => String(item.id) === String(categoryId)
+      (item) =>
+        String(item.id) ===
+        String(categoryId)
     );
   }, [categories, categoryId]);
 
@@ -233,7 +299,9 @@ export default function OwnerRegisterPage() {
 
   const selectedCity = useMemo(() => {
     return cities.find(
-      (item) => String(item.id) === String(cityId)
+      (item) =>
+        String(item.id) ===
+        String(cityId)
     );
   }, [cities, cityId]);
 
@@ -250,7 +318,11 @@ export default function OwnerRegisterPage() {
     setError("");
 
     try {
-      const [meRes, categoriesRes, citiesRes] = await Promise.all([
+      const [
+        meRes,
+        categoriesRes,
+        citiesRes,
+      ] = await Promise.all([
         fetch("/api/auth/me", {
           credentials: "include",
           cache: "no-store",
@@ -274,7 +346,8 @@ export default function OwnerRegisterPage() {
         return;
       }
 
-      const meData: MeResponse = await meRes.json();
+      const meData: MeResponse =
+        await meRes.json();
 
       const currentUser =
         meData.user ||
@@ -298,9 +371,12 @@ export default function OwnerRegisterPage() {
       // ----------------------------------------------------
 
       if (categoriesRes.ok) {
-        const categoriesData = await categoriesRes.json();
+        const categoriesData =
+          await categoriesRes.json();
 
-        setCategories(extractCategories(categoriesData));
+        setCategories(
+          extractCategories(categoriesData)
+        );
       } else {
         setCategories([]);
       }
@@ -310,16 +386,24 @@ export default function OwnerRegisterPage() {
       // ----------------------------------------------------
 
       if (citiesRes.ok) {
-        const citiesData = await citiesRes.json();
+        const citiesData =
+          await citiesRes.json();
 
-        setCities(extractCities(citiesData));
+        setCities(
+          extractCities(citiesData)
+        );
       } else {
         setCities([]);
       }
     } catch (err) {
-      console.error("Owner register load error:", err);
+      console.error(
+        "Owner register load error:",
+        err
+      );
 
-      setError("حدث خطأ أثناء تحميل بيانات الصفحة");
+      setError(
+        "حدث خطأ أثناء تحميل بيانات الصفحة"
+      );
     } finally {
       setLoading(false);
     }
@@ -339,7 +423,9 @@ export default function OwnerRegisterPage() {
     loadAreas(Number(cityId));
   }, [cityId]);
 
-  async function loadAreas(selectedCityId: number) {
+  async function loadAreas(
+    selectedCityId: number
+  ) {
     try {
       setAreaId("");
 
@@ -359,7 +445,10 @@ export default function OwnerRegisterPage() {
 
       setAreas(extractAreas(data));
     } catch (err) {
-      console.error("Load areas error:", err);
+      console.error(
+        "Load areas error:",
+        err
+      );
 
       setAreas([]);
     }
@@ -374,7 +463,6 @@ export default function OwnerRegisterPage() {
   ) {
     setCategoryId(e.target.value);
 
-    // تصفير التصنيف الفرعي عند تغيير الرئيسي
     setSubCategoryId("");
   }
 
@@ -388,9 +476,10 @@ export default function OwnerRegisterPage() {
         return null;
       }
 
-      const permission = await navigator.permissions.query({
-        name: "geolocation" as PermissionName,
-      });
+      const permission =
+        await navigator.permissions.query({
+          name: "geolocation" as PermissionName,
+        });
 
       return permission.state;
     } catch {
@@ -407,7 +496,9 @@ export default function OwnerRegisterPage() {
     // Browser support
     // ----------------------------------------------------
 
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
     if (!navigator.geolocation) {
       setLocationMessage(
@@ -434,76 +525,91 @@ export default function OwnerRegisterPage() {
     // ----------------------------------------------------
 
     setLocationLoading(true);
-    setLocationMessage("جاري تحديد موقعك...");
+    setLocationMessage(
+      "جاري تحديد موقعك..."
+    );
 
-    checkLocationPermission().then((permission) => {
-      if (permission === "denied") {
-        setLocationLoading(false);
-
-        setLocationMessage(
-          "تم رفض صلاحية الموقع من المتصفح. اسمح للموقع باستخدام الموقع من إعدادات المتصفح ثم حاول مرة أخرى."
-        );
-
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-
-          setLatitude(lat.toFixed(6));
-          setLongitude(lng.toFixed(6));
-
+    checkLocationPermission().then(
+      (permission) => {
+        if (permission === "denied") {
           setLocationLoading(false);
-          setLocationSuccess(true);
 
           setLocationMessage(
-            `تم تحديد موقعك بنجاح: ${lat.toFixed(
-              6
-            )}, ${lng.toFixed(6)}`
+            "تم رفض صلاحية الموقع من المتصفح. اسمح للموقع باستخدام الموقع من إعدادات المتصفح ثم حاول مرة أخرى."
           );
-        },
 
-        (geoError) => {
-          setLocationLoading(false);
-          setLocationSuccess(false);
-
-          switch (geoError.code) {
-            case geoError.PERMISSION_DENIED:
-              setLocationMessage(
-                "تم رفض إذن تحديد الموقع. اسمح للموقع باستخدام موقعك من المتصفح ثم أعد المحاولة."
-              );
-              break;
-
-            case geoError.POSITION_UNAVAILABLE:
-              setLocationMessage(
-                "تعذر الحصول على الموقع الحالي. تأكد من تشغيل خدمة الموقع على الجهاز."
-              );
-              break;
-
-            case geoError.TIMEOUT:
-              setLocationMessage(
-                "استغرق تحديد الموقع وقتًا طويلًا. حاول مرة أخرى."
-              );
-              break;
-
-            default:
-              setLocationMessage(
-                "حدث خطأ أثناء تحديد موقعك."
-              );
-          }
-
-          console.error("Geolocation error:", geoError);
-        },
-
-        {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 30000,
+          return;
         }
-      );
-    });
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat =
+              position.coords.latitude;
+
+            const lng =
+              position.coords.longitude;
+
+            setLatitude(
+              lat.toFixed(6)
+            );
+
+            setLongitude(
+              lng.toFixed(6)
+            );
+
+            setLocationLoading(false);
+            setLocationSuccess(true);
+
+            setLocationMessage(
+              `تم تحديد موقعك بنجاح: ${lat.toFixed(
+                6
+              )}, ${lng.toFixed(6)}`
+            );
+          },
+
+          (geoError) => {
+            setLocationLoading(false);
+            setLocationSuccess(false);
+
+            switch (geoError.code) {
+              case geoError.PERMISSION_DENIED:
+                setLocationMessage(
+                  "تم رفض إذن تحديد الموقع. اسمح للموقع باستخدام موقعك من المتصفح ثم أعد المحاولة."
+                );
+                break;
+
+              case geoError.POSITION_UNAVAILABLE:
+                setLocationMessage(
+                  "تعذر الحصول على الموقع الحالي. تأكد من تشغيل خدمة الموقع على الجهاز."
+                );
+                break;
+
+              case geoError.TIMEOUT:
+                setLocationMessage(
+                  "استغرق تحديد الموقع وقتًا طويلًا. حاول مرة أخرى."
+                );
+                break;
+
+              default:
+                setLocationMessage(
+                  "حدث خطأ أثناء تحديد موقعك."
+                );
+            }
+
+            console.error(
+              "Geolocation error:",
+              geoError
+            );
+          },
+
+          {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 30000,
+          }
+        );
+      }
+    );
   }
 
   // =======================================================
@@ -515,7 +621,10 @@ export default function OwnerRegisterPage() {
     setSuccess("");
 
     if (!cityId) {
-      setError("اختر المدينة أولًا قبل اقتراح منطقة جديدة.");
+      setError(
+        "اختر المدينة أولًا قبل اقتراح منطقة جديدة."
+      );
+
       return;
     }
 
@@ -540,20 +649,30 @@ export default function OwnerRegisterPage() {
     setError("");
     setSuccess("");
 
-    const cleanName = suggestedAreaName.trim();
+    const cleanName =
+      suggestedAreaName.trim();
 
     if (!cityId) {
-      setError("اختر المدينة أولًا.");
+      setError(
+        "اختر المدينة أولًا."
+      );
+
       return;
     }
 
     if (!cleanName) {
-      setError("اكتب اسم المنطقة المقترحة.");
+      setError(
+        "اكتب اسم المنطقة المقترحة."
+      );
+
       return;
     }
 
     if (cleanName.length < 2) {
-      setError("اسم المنطقة يجب أن يكون حرفين على الأقل.");
+      setError(
+        "اسم المنطقة يجب أن يكون حرفين على الأقل."
+      );
+
       return;
     }
 
@@ -565,7 +684,8 @@ export default function OwnerRegisterPage() {
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
           },
           credentials: "include",
 
@@ -579,7 +699,9 @@ export default function OwnerRegisterPage() {
         }
       );
 
-      const data = await res.json().catch(() => ({}));
+      const data = await res
+        .json()
+        .catch(() => ({}));
 
       if (!res.ok) {
         throw new Error(
@@ -616,198 +738,233 @@ export default function OwnerRegisterPage() {
   // Submit business request
   // =======================================================
 
- async function handleSubmit(
-  e: React.FormEvent
-) {
-  e.preventDefault();
+  async function handleSubmit(
+    e: React.FormEvent
+  ) {
+    e.preventDefault();
 
-  setError("");
-  setSuccess("");
+    setError("");
+    setSuccess("");
 
-  // ----------------------------------------------------
-  // Validation
-  // ----------------------------------------------------
+    // ----------------------------------------------------
+    // Validation
+    // ----------------------------------------------------
 
-  const cleanName = name.trim();
-  const cleanPhone = phone.trim();
+    const cleanName = name.trim();
+    const cleanPhone = phone.trim();
 
-  if (!cleanName) {
-    setError("اكتب اسم النشاط.");
-    return;
-  }
+    if (!cleanName) {
+      setError(
+        "اكتب اسم النشاط."
+      );
 
-  if (!categoryId) {
-    setError("اختر تصنيف النشاط.");
-    return;
-  }
-
-  if (!cityId) {
-    setError("اختر المدينة.");
-    return;
-  }
-
-  if (!cleanPhone) {
-    setError("اكتب رقم الهاتف.");
-    return;
-  }
-
-  const selectedCityData = cities.find(
-    (city) => Number(city.id) === Number(cityId)
-  );
-
-  const governorateId =
-    selectedCityData?.governorateId ??
-    selectedCityData?.governorate_id ??
-    undefined;
-
-  const payload: Record<string, unknown> = {
-    name: cleanName,
-    categoryId: Number(categoryId),
-    cityId: Number(cityId),
-    phone: cleanPhone,
-  };
-
-  // ----------------------------------------------------
-  // Optional fields
-  // مهم: لا نرسل null
-  // ----------------------------------------------------
-
-  const cleanDescription = description.trim();
-
-  if (cleanDescription) {
-    payload.description = cleanDescription;
-  }
-
-  if (subCategoryId) {
-    payload.subCategoryId = Number(subCategoryId);
-  }
-
-  if (governorateId) {
-    payload.governorateId = Number(governorateId);
-  }
-
-  if (areaId) {
-    payload.areaId = Number(areaId);
-  }
-
-  const cleanAddress = address.trim();
-
-  if (cleanAddress) {
-    payload.address = cleanAddress;
-  }
-
-  const cleanWhatsApp = whatsapp.trim();
-
-  if (cleanWhatsApp) {
-    payload.whatsapp = cleanWhatsApp;
-  }
-
-  const cleanWebsite = website.trim();
-
-  if (cleanWebsite) {
-    payload.website = cleanWebsite;
-  }
-
-  if (priceRange) {
-    payload.priceRange = priceRange;
-  }
-
-  // ----------------------------------------------------
-  // Coordinates
-  // ----------------------------------------------------
-
-  if (latitude.trim()) {
-    const lat = Number(latitude);
-
-    if (
-      !Number.isFinite(lat) ||
-      lat < -90 ||
-      lat > 90
-    ) {
-      setError("خط العرض غير صحيح.");
       return;
     }
 
-    payload.latitude = lat;
-  }
+    if (!categoryId) {
+      setError(
+        "اختر تصنيف النشاط."
+      );
 
-  if (longitude.trim()) {
-    const lng = Number(longitude);
-
-    if (
-      !Number.isFinite(lng) ||
-      lng < -180 ||
-      lng > 180
-    ) {
-      setError("خط الطول غير صحيح.");
       return;
     }
 
-    payload.longitude = lng;
-  }
+    if (!cityId) {
+      setError(
+        "اختر المدينة."
+      );
 
-  setSubmitting(true);
+      return;
+    }
 
-  try {
-    console.log(
-      "OWNER REQUEST PAYLOAD:",
-      payload
-    );
+    if (!cleanPhone) {
+      setError(
+        "اكتب رقم الهاتف."
+      );
 
-    const res = await fetch(
-      "/api/owner/requests",
-      {
-        method: "POST",
+      return;
+    }
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const selectedCityData =
+      cities.find(
+        (city) =>
+          Number(city.id) ===
+          Number(cityId)
+      );
 
-        credentials: "include",
+    const governorateId =
+      selectedCityData?.governorateId ??
+      selectedCityData?.governorate_id ??
+      undefined;
 
-        body: JSON.stringify(payload),
+    const payload: Record<
+      string,
+      unknown
+    > = {
+      name: cleanName,
+      categoryId: Number(categoryId),
+      cityId: Number(cityId),
+      phone: cleanPhone,
+    };
+
+    // ----------------------------------------------------
+    // Optional fields
+    // مهم: لا نرسل null
+    // ----------------------------------------------------
+
+    const cleanDescription =
+      description.trim();
+
+    if (cleanDescription) {
+      payload.description =
+        cleanDescription;
+    }
+
+    if (subCategoryId) {
+      payload.subCategoryId =
+        Number(subCategoryId);
+    }
+
+    if (governorateId) {
+      payload.governorateId =
+        governorateId;
+    }
+
+    if (areaId) {
+      payload.areaId =
+        Number(areaId);
+    }
+
+    const cleanAddress =
+      address.trim();
+
+    if (cleanAddress) {
+      payload.address =
+        cleanAddress;
+    }
+
+    const cleanWhatsApp =
+      whatsapp.trim();
+
+    if (cleanWhatsApp) {
+      payload.whatsapp =
+        cleanWhatsApp;
+    }
+
+    const cleanWebsite =
+      website.trim();
+
+    if (cleanWebsite) {
+      payload.website =
+        cleanWebsite;
+    }
+
+    if (priceRange) {
+      payload.priceRange =
+        priceRange;
+    }
+
+    // ----------------------------------------------------
+    // Coordinates
+    // ----------------------------------------------------
+
+    if (latitude.trim()) {
+      const lat = Number(latitude);
+
+      if (
+        !Number.isFinite(lat) ||
+        lat < -90 ||
+        lat > 90
+      ) {
+        setError(
+          "خط العرض غير صحيح."
+        );
+
+        return;
       }
-    );
 
-    const data = await res
-      .json()
-      .catch(() => ({}));
-
-    if (!res.ok) {
-      console.error(
-        "OWNER REQUEST API ERROR:",
-        data
-      );
-
-      throw new Error(
-        data?.error ||
-          data?.message ||
-          "تعذر إرسال الطلب."
-      );
+      payload.latitude = lat;
     }
 
-    setSuccess(
-      "تم إرسال طلب إضافة النشاط بنجاح، وسيتم مراجعته من الإدارة."
-    );
+    if (longitude.trim()) {
+      const lng = Number(longitude);
 
-    setTimeout(() => {
-      router.push("/owner/requests");
-      router.refresh();
-    }, 900);
-  } catch (err: any) {
-    console.error(
-      "Owner register submit error:",
-      err
-    );
+      if (
+        !Number.isFinite(lng) ||
+        lng < -180 ||
+        lng > 180
+      ) {
+        setError(
+          "خط الطول غير صحيح."
+        );
 
-    setError(
-      err?.message ||
-        "حدث خطأ أثناء إرسال الطلب."
-    );
-  } finally {
-    setSubmitting(false);
+        return;
+      }
+
+      payload.longitude = lng;
+    }
+
+    setSubmitting(true);
+
+    try {
+      console.log(
+        "OWNER REQUEST PAYLOAD:",
+        payload
+      );
+
+      const res = await fetch(
+        "/api/owner/requests",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          credentials: "include",
+
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await res
+        .json()
+        .catch(() => ({}));
+
+      if (!res.ok) {
+        console.error(
+          "OWNER REQUEST API ERROR:",
+          data
+        );
+
+        throw new Error(
+          data?.error ||
+            data?.message ||
+            "تعذر إرسال الطلب."
+        );
+      }
+
+      // ==================================================
+      // نجاح الإرسال
+      // ==================================================
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error(
+        "Owner register submit error:",
+        err
+      );
+
+      setError(
+        err?.message ||
+          "حدث خطأ أثناء إرسال الطلب."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
-}
+
   // =======================================================
   // Loading
   // =======================================================
@@ -833,6 +990,224 @@ export default function OwnerRegisterPage() {
           <p className="mt-2 text-sm text-slate-500">
             يتم تحميل بيانات النشاط والمدن والتصنيفات...
           </p>
+        </div>
+      </main>
+    );
+  }
+
+  // =======================================================
+  // Submitted Success Screen
+  // =======================================================
+
+  if (submitted) {
+    return (
+      <main
+        dir="rtl"
+        className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10"
+      >
+        <div className="w-full max-w-2xl">
+          <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl overflow-hidden">
+            {/* Success Header */}
+
+            <div className="bg-gradient-to-l from-emerald-700 via-emerald-600 to-teal-600 px-6 md:px-10 py-10 text-white text-center">
+              <div className="mx-auto w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-5">
+                <CheckCircle2 size={46} />
+              </div>
+
+              <h1 className="text-2xl md:text-3xl font-black">
+                تم إرسال نشاطك بنجاح
+              </h1>
+
+              <p className="mt-3 text-white/85 text-sm md:text-base leading-7 max-w-xl mx-auto">
+                تم استلام طلب إضافة النشاط وسيتم
+                مراجعته من الإدارة قبل نشره على
+                منصة قُرب.
+              </p>
+            </div>
+
+            {/* Content */}
+
+            <div className="p-6 md:p-8">
+              {/* Status */}
+
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 mb-7">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-amber-600 shrink-0 shadow-sm">
+                    <AlertCircle size={21} />
+                  </div>
+
+                  <div>
+                    <h2 className="font-black text-amber-800">
+                      حالة الطلب: قيد المراجعة
+                    </h2>
+
+                    <p className="text-sm text-amber-700 mt-1 leading-6">
+                      ستقوم الإدارة بمراجعة بيانات
+                      النشاط، وبعد الموافقة سيظهر
+                      النشاط على المنصة.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Next Steps */}
+
+              <div className="mb-7">
+                <h2 className="text-lg font-black text-slate-800 mb-2">
+                  ماذا بعد؟
+                </h2>
+
+                <p className="text-sm text-slate-500 leading-7 mb-5">
+                  بعد اعتماد النشاط يمكنك استكمال
+                  صفحته وإضافة التفاصيل التي تساعد
+                  الزوار على التعرف عليه.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Images */}
+
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                        📷
+                      </div>
+
+                      <div>
+                        <p className="font-bold text-slate-800">
+                          الصور
+                        </p>
+
+                        <p className="text-xs text-slate-500 mt-1">
+                          أضف صور النشاط
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Services */}
+
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                        🛠
+                      </div>
+
+                      <div>
+                        <p className="font-bold text-slate-800">
+                          الخدمات
+                        </p>
+
+                        <p className="text-xs text-slate-500 mt-1">
+                          أضف خدماتك وأسعارها
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Working Hours */}
+
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center text-lg">
+                        🕐
+                      </div>
+
+                      <div>
+                        <p className="font-bold text-slate-800">
+                          مواعيد العمل
+                        </p>
+
+                        <p className="text-xs text-slate-500 mt-1">
+                          حدد أوقات العمل
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Offers / Events */}
+
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-lg">
+                        🎁
+                      </div>
+
+                      <div>
+                        <p className="font-bold text-slate-800">
+                          العروض والفعاليات
+                        </p>
+
+                        <p className="text-xs text-slate-500 mt-1">
+                          أضف عروضك وفعالياتك
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    router.push(
+                      "/owner/requests"
+                    );
+                    router.refresh();
+                  }}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-sm"
+                >
+                  متابعة طلباتي
+                  <ArrowRight size={18} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    router.push(
+                      "/owner/dashboard"
+                    );
+                    router.refresh();
+                  }}
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold transition"
+                >
+                  لوحة التحكم
+                </button>
+              </div>
+
+              {/* Add another */}
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitted(false);
+                  setSuccess("");
+                  setError("");
+
+                  setName("");
+                  setDescription("");
+                  setCategoryId("");
+                  setSubCategoryId("");
+                  setCityId("");
+                  setAreaId("");
+                  setAddress("");
+                  setLatitude("");
+                  setLongitude("");
+                  setPhone("");
+                  setWhatsapp("");
+                  setWebsite("");
+                  setPriceRange("");
+                  setLocationMessage("");
+                  setLocationSuccess(false);
+                }}
+                className="w-full mt-4 text-sm font-bold text-slate-500 hover:text-emerald-600 transition"
+              >
+                إضافة نشاط آخر
+              </button>
+            </div>
+          </div>
         </div>
       </main>
     );
@@ -883,7 +1258,9 @@ export default function OwnerRegisterPage() {
                 <button
                   type="button"
                   onClick={() =>
-                    router.push("/owner/requests")
+                    router.push(
+                      "/owner/requests"
+                    )
                   }
                   className="inline-flex items-center justify-center gap-2 bg-white text-emerald-700 hover:bg-emerald-50 px-5 py-3 rounded-xl font-bold transition"
                 >
@@ -901,8 +1278,9 @@ export default function OwnerRegisterPage() {
                 />
 
                 <p className="text-sm leading-7 text-slate-600">
-                  بعد إرسال الطلب ستقوم الإدارة بمراجعته قبل
-                  نشر النشاط على المنصة.
+                  بعد إرسال الطلب ستقوم الإدارة
+                  بمراجعته قبل نشر النشاط على
+                  المنصة.
                 </p>
               </div>
             </div>
@@ -946,7 +1324,9 @@ export default function OwnerRegisterPage() {
 
               <button
                 type="button"
-                onClick={() => setSuccess("")}
+                onClick={() =>
+                  setSuccess("")
+                }
                 className="mr-auto text-emerald-400 hover:text-emerald-600"
               >
                 <X size={18} />
@@ -998,7 +1378,9 @@ export default function OwnerRegisterPage() {
                     type="text"
                     value={name}
                     onChange={(e) =>
-                      setName(e.target.value)
+                      setName(
+                        e.target.value
+                      )
                     }
                     placeholder="مثال: مطعم أبو أحمد"
                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
@@ -1015,7 +1397,9 @@ export default function OwnerRegisterPage() {
                   <textarea
                     value={description}
                     onChange={(e) =>
-                      setDescription(e.target.value)
+                      setDescription(
+                        e.target.value
+                      )
                     }
                     rows={4}
                     placeholder="اكتب وصفًا مختصرًا عن النشاط والخدمات التي يقدمها..."
@@ -1041,21 +1425,29 @@ export default function OwnerRegisterPage() {
 
                     <select
                       value={categoryId}
-                      onChange={handleCategoryChange}
+                      onChange={
+                        handleCategoryChange
+                      }
                       className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 pr-11 pl-4 py-3.5 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                     >
                       <option value="">
                         اختر التصنيف
                       </option>
 
-                      {categories.map((category) => (
-                        <option
-                          key={category.id}
-                          value={category.id}
-                        >
-                          {category.name}
-                        </option>
-                      ))}
+                      {categories.map(
+                        (category) => (
+                          <option
+                            key={
+                              category.id
+                            }
+                            value={
+                              category.id
+                            }
+                          >
+                            {category.name}
+                          </option>
+                        )
+                      )}
                     </select>
                   </div>
                 </div>
@@ -1076,26 +1468,36 @@ export default function OwnerRegisterPage() {
                     }
                     disabled={
                       !categoryId ||
-                      subCategories.length === 0
+                      subCategories.length ===
+                        0
                     }
                     className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <option value="">
                       {!categoryId
                         ? "اختر التصنيف أولًا"
-                        : subCategories.length === 0
+                        : subCategories.length ===
+                          0
                         ? "لا يوجد تصنيف فرعي"
                         : "اختر التصنيف الفرعي"}
                     </option>
 
-                    {subCategories.map((subCategory) => (
-                      <option
-                        key={subCategory.id}
-                        value={subCategory.id}
-                      >
-                        {subCategory.name}
-                      </option>
-                    ))}
+                    {subCategories.map(
+                      (subCategory) => (
+                        <option
+                          key={
+                            subCategory.id
+                          }
+                          value={
+                            subCategory.id
+                          }
+                        >
+                          {
+                            subCategory.name
+                          }
+                        </option>
+                      )
+                    )}
                   </select>
                 </div>
 
@@ -1184,14 +1586,16 @@ export default function OwnerRegisterPage() {
                       اختر المدينة
                     </option>
 
-                    {cities.map((city) => (
-                      <option
-                        key={city.id}
-                        value={city.id}
-                      >
-                        {city.name}
-                      </option>
-                    ))}
+                    {cities.map(
+                      (city) => (
+                        <option
+                          key={city.id}
+                          value={city.id}
+                        >
+                          {city.name}
+                        </option>
+                      )
+                    )}
                   </select>
                 </div>
 
@@ -1205,7 +1609,9 @@ export default function OwnerRegisterPage() {
 
                     <button
                       type="button"
-                      onClick={openAreaSuggestion}
+                      onClick={
+                        openAreaSuggestion
+                      }
                       disabled={!cityId}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 disabled:text-slate-400 disabled:cursor-not-allowed transition"
                     >
@@ -1232,14 +1638,16 @@ export default function OwnerRegisterPage() {
                         : "بدون تحديد منطقة"}
                     </option>
 
-                    {areas.map((area) => (
-                      <option
-                        key={area.id}
-                        value={area.id}
-                      >
-                        {area.name}
-                      </option>
-                    ))}
+                    {areas.map(
+                      (area) => (
+                        <option
+                          key={area.id}
+                          value={area.id}
+                        >
+                          {area.name}
+                        </option>
+                      )
+                    )}
                   </select>
 
                   {!cityId && (
@@ -1251,8 +1659,8 @@ export default function OwnerRegisterPage() {
                   {cityId &&
                     areas.length === 0 && (
                       <p className="text-[11px] text-amber-600 mt-2">
-                        لا توجد مناطق مسجلة لهذه المدينة حاليًا.
-                        يمكنك اقتراح منطقة جديدة.
+                        لا توجد مناطق مسجلة لهذه المدينة
+                        حاليًا. يمكنك اقتراح منطقة جديدة.
                       </p>
                     )}
                 </div>
@@ -1292,16 +1700,20 @@ export default function OwnerRegisterPage() {
                         </h3>
 
                         <p className="text-xs text-slate-500 leading-6 mt-1">
-                          استخدم موقع جهازك لتحديد إحداثيات
-                          النشاط تلقائيًا.
+                          استخدم موقع جهازك لتحديد
+                          إحداثيات النشاط تلقائيًا.
                         </p>
                       </div>
                     </div>
 
                     <button
                       type="button"
-                      onClick={useCurrentLocation}
-                      disabled={locationLoading}
+                      onClick={
+                        useCurrentLocation
+                      }
+                      disabled={
+                        locationLoading
+                      }
                       className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 disabled:bg-sky-300 text-white text-sm font-bold transition shadow-sm"
                     >
                       {locationLoading ? (
@@ -1515,8 +1927,9 @@ export default function OwnerRegisterPage() {
                   </h2>
 
                   <p className="text-sm text-slate-500 mt-2 leading-7">
-                    بعد الضغط على إرسال سيتم تحويل الطلب إلى
-                    الإدارة للمراجعة والموافقة.
+                    بعد الضغط على إرسال سيتم تحويل
+                    الطلب إلى الإدارة للمراجعة
+                    والموافقة.
                   </p>
                 </div>
 
@@ -1556,7 +1969,8 @@ export default function OwnerRegisterPage() {
           className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4"
           onMouseDown={(e) => {
             if (
-              e.target === e.currentTarget &&
+              e.target ===
+                e.currentTarget &&
               !areaSuggestionLoading
             ) {
               closeAreaSuggestion();
@@ -1586,8 +2000,12 @@ export default function OwnerRegisterPage() {
 
                 <button
                   type="button"
-                  onClick={closeAreaSuggestion}
-                  disabled={areaSuggestionLoading}
+                  onClick={
+                    closeAreaSuggestion
+                  }
+                  disabled={
+                    areaSuggestionLoading
+                  }
                   className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 disabled:opacity-50 flex items-center justify-center transition"
                 >
                   <X size={19} />
@@ -1598,7 +2016,9 @@ export default function OwnerRegisterPage() {
             {/* Modal body */}
 
             <form
-              onSubmit={submitAreaSuggestion}
+              onSubmit={
+                submitAreaSuggestion
+              }
               className="p-6 space-y-5"
             >
               {/* Selected city */}
@@ -1632,7 +2052,9 @@ export default function OwnerRegisterPage() {
                 <input
                   autoFocus
                   type="text"
-                  value={suggestedAreaName}
+                  value={
+                    suggestedAreaName
+                  }
                   onChange={(e) =>
                     setSuggestedAreaName(
                       e.target.value
@@ -1654,7 +2076,9 @@ export default function OwnerRegisterPage() {
                 </label>
 
                 <textarea
-                  value={suggestedAreaNotes}
+                  value={
+                    suggestedAreaNotes
+                  }
                   onChange={(e) =>
                     setSuggestedAreaNotes(
                       e.target.value
@@ -1669,9 +2093,10 @@ export default function OwnerRegisterPage() {
               {/* Info */}
 
               <div className="rounded-2xl bg-emerald-50 border border-emerald-100 px-4 py-3.5 text-xs text-emerald-700 leading-6">
-                اقتراح المنطقة لا يضيفها مباشرة إلى النظام. بعد
-                موافقة الإدارة ستظهر المنطقة تلقائيًا لجميع
-                المستخدمين داخل هذه المدينة.
+                اقتراح المنطقة لا يضيفها مباشرة إلى
+                النظام. بعد موافقة الإدارة ستظهر
+                المنطقة تلقائيًا لجميع المستخدمين داخل
+                هذه المدينة.
               </div>
 
               {/* Actions */}
@@ -1679,8 +2104,12 @@ export default function OwnerRegisterPage() {
               <div className="flex flex-col-reverse sm:flex-row gap-3 pt-1">
                 <button
                   type="button"
-                  onClick={closeAreaSuggestion}
-                  disabled={areaSuggestionLoading}
+                  onClick={
+                    closeAreaSuggestion
+                  }
+                  disabled={
+                    areaSuggestionLoading
+                  }
                   className="flex-1 px-5 py-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm transition disabled:opacity-50"
                 >
                   إلغاء
@@ -1688,7 +2117,9 @@ export default function OwnerRegisterPage() {
 
                 <button
                   type="submit"
-                  disabled={areaSuggestionLoading}
+                  disabled={
+                    areaSuggestionLoading
+                  }
                   className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white font-bold text-sm transition"
                 >
                   {areaSuggestionLoading ? (

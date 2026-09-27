@@ -195,7 +195,7 @@ export default async function HomePage() {
 
       {/* Owner CTA */}
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2rem] bg-sky-600 p-8 text-white sm:p-12">
+        <div className="overflow-hidden rounded-4xl bg-sky-600 p-8 text-white sm:p-12">
           <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
             <div>
               <div className="text-sm font-bold text-sky-100">
