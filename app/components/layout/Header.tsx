@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   Heart,
+  Info,
   LoaderCircle,
   LogOut,
   MapPinned,
@@ -11,6 +12,7 @@ import {
   Store,
   User,
   X,
+  Phone,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -121,10 +123,6 @@ export default function Header() {
     setOpen(false);
   }
 
-  // =========================================================
-  // ROLE HELPERS
-  // =========================================================
-
   const isAdmin =
     user?.role === "Admin";
 
@@ -163,36 +161,51 @@ export default function Header() {
         {/* DESKTOP NAVIGATION */}
         {/* ================================================= */}
 
-        <nav className="hidden items-center gap-2 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
+
           <Link
             href="/"
-            className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
           >
             الرئيسية
           </Link>
 
           <Link
             href="/map"
-            className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
           >
             الخريطة
           </Link>
 
           <Link
             href="/businesses"
-            className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+            className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
           >
             الأماكن
           </Link>
 
-          {/* =============================================== */}
+          <Link
+            href="/about"
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+          >
+            <Info className="h-4 w-4" />
+            من نحن
+          </Link>
+
+          <Link
+            href="/contact"
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+          >
+            <Phone className="h-4 w-4" />
+            تواصل معنا
+          </Link>
+
           {/* USER / OWNER → ADD BUSINESS */}
-          {/* =============================================== */}
 
           {!isAdmin && (
             <Link
               href="/owner/register"
-              className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
             >
               <Store className="h-4 w-4" />
 
@@ -202,27 +215,23 @@ export default function Header() {
             </Link>
           )}
 
-          {/* =============================================== */}
           {/* BUSINESS OWNER */}
-          {/* =============================================== */}
 
           {isBusinessOwner && (
             <Link
               href="/owner/dashboard"
-              className="rounded-xl bg-violet-50 px-4 py-2 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
+              className="rounded-xl bg-violet-50 px-3 py-2 text-sm font-bold text-violet-700 transition hover:bg-violet-100"
             >
               لوحة نشاطي
             </Link>
           )}
 
-          {/* =============================================== */}
           {/* ADMIN */}
-          {/* =============================================== */}
 
           {isAdmin && (
             <Link
               href="/admin"
-              className="flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white transition hover:bg-slate-800"
+              className="flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-bold text-white transition hover:bg-slate-800"
             >
               <ShieldCheck className="h-4 w-4" />
               لوحة الإدارة
@@ -236,7 +245,6 @@ export default function Header() {
 
         <div className="hidden items-center gap-2 md:flex">
 
-          {/* Favorites */}
           <Link
             href="/favorites"
             className="flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50 px-4 py-2.5 text-sm font-bold text-rose-600 transition hover:bg-rose-100"
@@ -245,7 +253,6 @@ export default function Header() {
             المفضلة
           </Link>
 
-          {/* Loading */}
           {loading ? (
             <div className="flex h-10 w-24 items-center justify-center rounded-xl bg-slate-100">
               <LoaderCircle className="h-4 w-4 animate-spin text-slate-400" />
@@ -253,7 +260,6 @@ export default function Header() {
           ) : user ? (
             <div className="flex items-center gap-2">
 
-              {/* Greeting */}
               <div className="flex items-center gap-2 rounded-xl bg-slate-50 px-4 py-2.5">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-100 text-sky-700">
                   <User className="h-4 w-4" />
@@ -270,7 +276,6 @@ export default function Header() {
                 </div>
               </div>
 
-              {/* Logout */}
               <button
                 type="button"
                 onClick={handleLogout}
@@ -337,7 +342,6 @@ export default function Header() {
         <div className="border-t border-slate-100 bg-white px-4 py-4 md:hidden">
           <div className="flex flex-col gap-2">
 
-            {/* User information */}
             {user && !loading && (
               <div className="mb-2 rounded-2xl bg-sky-50 p-4">
                 <div className="text-xs text-sky-600">
@@ -382,7 +386,24 @@ export default function Header() {
               الأماكن
             </Link>
 
-            {/* Favorites */}
+            <Link
+              href="/about"
+              onClick={closeMobileMenu}
+              className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold hover:bg-slate-50"
+            >
+              <Info className="h-4 w-4" />
+              من نحن
+            </Link>
+
+            <Link
+              href="/contact"
+              onClick={closeMobileMenu}
+              className="flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold hover:bg-slate-50"
+            >
+              <Phone className="h-4 w-4" />
+              تواصل معنا
+            </Link>
+
             <Link
               href="/favorites"
               onClick={closeMobileMenu}
@@ -392,7 +413,6 @@ export default function Header() {
               المفضلة
             </Link>
 
-            {/* User / Owner */}
             {!isAdmin && (
               <Link
                 href="/owner/register"
@@ -407,7 +427,6 @@ export default function Header() {
               </Link>
             )}
 
-            {/* Business Owner Dashboard */}
             {isBusinessOwner && (
               <Link
                 href="/owner/dashboard"
@@ -418,7 +437,6 @@ export default function Header() {
               </Link>
             )}
 
-            {/* Admin Dashboard */}
             {isAdmin && (
               <Link
                 href="/admin"
@@ -430,7 +448,6 @@ export default function Header() {
               </Link>
             )}
 
-            {/* Logged out */}
             {!user && !loading && (
               <>
                 <Link
@@ -451,7 +468,6 @@ export default function Header() {
               </>
             )}
 
-            {/* Logout */}
             {user && !loading && (
               <button
                 type="button"
@@ -474,3 +490,4 @@ export default function Header() {
     </header>
   );
 }
+
